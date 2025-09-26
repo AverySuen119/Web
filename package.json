@@ -1,0 +1,22 @@
+{
+  "name": "new-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AverySuen119/Web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AverySuen119/Web/issues"
+  },
+  "homepage": "https://github.com/AverySuen119/Web#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

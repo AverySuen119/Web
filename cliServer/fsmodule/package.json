@@ -1,0 +1,12 @@
+{
+  "name": "fsmodule",
+  "version": "1.0.0",
+  "main": "fsmodule.js",
+  "scripts": {
+    "start": "node fsmodule.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
