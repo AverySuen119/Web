@@ -3,24 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Event Details</title>
+  <title>Event Details — Animal Welfare</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <nav class="nav">
-    <a href="/">Home</a>
-    <a href="/search.html">Search Events</a>
-  </nav>
+  <!-- 导航 -->
+  <header class="header">
+    <div class="container">
+      <h1>Animal Welfare Events</h1>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/search.html">Search Events</a>
+      </nav>
+    </div>
+  </header>
 
-  <main>
+  <!-- 主要内容 -->
+  <main class="container">
     <section id="event-container" class="event-details">
-      <!-- 事件详情将由 JS 渲染 -->
       <p class="loading">Loading event...</p>
     </section>
   </main>
 
-  <footer>
-    <p>© Sunrise Charity</p>
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 Animal Welfare Foundation • Address: 10 Charity St, Petville</p>
+    </div>
   </footer>
 
   <script type="module">
@@ -28,7 +37,6 @@
 
     const container = document.getElementById('event-container');
 
-    // 从 URL 获取 ?id=xxx
     function getEventIdFromURL() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
@@ -48,25 +56,34 @@
           return;
         }
 
-        const evDate = new Date(event.event_date).toLocaleDateString();
-        const price = event.is_free ? 'Free' : `$${event.price}`;
+        const evDate = new Date(event.event_date).toLocaleString();
+        const price = event.is_free ? 'Free' : `$${Number(event.price).toFixed(2)}`;
 
         container.innerHTML = `
-          <h1>${event.name}</h1>
-          <p><strong>Date:</strong> ${evDate}</p>
-          <p><strong>Location:</strong> ${event.location_name}</p>
-          <p><strong>Category:</strong> ${event.category_name}</p>
-          <p><strong>Price:</strong> ${price}</p>
-          <p>${event.full_desc || ''}</p>
-          <button onclick="alert('This feature is currently under construction')">Register</button>
+          <article class="card event-card">
+            <h2 class="card-title">${event.name}</h2>
+            <p class="meta"><strong>Category:</strong> ${event.category_name}</p>
+            <p class="meta"><strong>Date:</strong> ${evDate}</p>
+            <p class="meta"><strong>Location:</strong> ${event.location_name || 'TBA'}</p>
+            <p class="meta"><strong>Price:</strong> ${price}</p>
+            <p class="desc">${event.full_desc || ''}</p>
+            <button class="btn" id="register-btn">Register</button>
+          </article>
         `;
+
+        // 注册按钮弹窗
+        const registerBtn = document.getElementById('register-btn');
+        registerBtn.addEventListener('click', () => {
+          alert('This feature is currently under construction');
+        });
+
       } catch (err) {
         console.error(err);
         container.innerHTML = '<p class="error">Failed to load event.</p>';
       }
     }
 
-    loadEvent();
+    document.addEventListener('DOMContentLoaded', loadEvent);
   </script>
 </body>
 </html>

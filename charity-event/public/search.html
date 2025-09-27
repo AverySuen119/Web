@@ -3,66 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Search Charity Events</title>
+  <title>Search Animal Welfare Events</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <nav class="nav">
-    <a href="/">Home</a>
-    <a href="/search.html">Search Events</a>
-  </nav>
-
-  <header class="hero">
-    <h1>Search Events</h1>
-    <p>Find charity events in your city based on date, location, or category.</p>
+  <header class="header">
+    <div class="container">
+      <h1>Search Animal Welfare Events</h1>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/search.html">Search Events</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
+  <main class="container">
     <section class="search-section">
-      <form id="search-form">
-        <label>
-          Date:
-          <select id="year">
-            <option value="">Year</option>
-            <script>
-              for (let y = 2000; y <= 2025; y++) {
-                document.write(`<option value="${y}">${y}</option>`);
-              }
-            </script>
-          </select>
-
-          <select id="month">
-            <option value="">Month</option>
-            <script>
-              for (let m = 1; m <= 12; m++) {
-                document.write(`<option value="${m}">${m}</option>`);
-              }
-            </script>
-          </select>
-
-          <select id="day">
-            <option value="">Day</option>
-            <script>
-              for (let d = 1; d <= 31; d++) {
-                document.write(`<option value="${d}">${d}</option>`);
-              }
-            </script>
-          </select>
-        </label>
-
-        <label>
-          Location: <input type="text" id="location" name="location" placeholder="Enter city or park">
-        </label>
-
-        <label>
-          Category:
-          <select id="category" name="category">
-            <option value="">All Categories</option>
-          </select>
-        </label>
-
-        <button type="submit">Search</button>
-        <button type="button" id="clear-filters">Clear Filters</button>
+      <form id="search-form" class="search-form">
+        <div class="form-row">
+          <label>Year:
+            <select id="year" name="year"><option value="">Any</option></select>
+          </label>
+          <label>Month:
+            <select id="month" name="month"><option value="">Any</option></select>
+          </label>
+          <label>Day:
+            <select id="day" name="day"><option value="">Any</option></select>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Location:
+            <input type="text" id="location" name="location" placeholder="Enter city or park">
+          </label>
+          <label>Category:
+            <select id="category" name="category"><option value="">All Categories</option></select>
+          </label>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="btn">Search</button>
+          <button type="button" id="clear-filters" class="btn btn-secondary">Clear Filters</button>
+        </div>
       </form>
 
       <div id="events-container" class="cards"></div>
@@ -70,8 +50,10 @@
     </section>
   </main>
 
-  <footer>
-    <p>© Sunrise Charity</p>
+  <footer class="footer">
+    <div class="container">
+      <p>© Paws & Whiskers • Adress: 10 Charity St, Petville</p>
+    </div>
   </footer>
 
   <script type="module">
@@ -82,6 +64,28 @@
     const emptyEl = document.getElementById('events-empty');
     const clearBtn = document.getElementById('clear-filters');
     const categorySelect = document.getElementById('category');
+    const yearSelect = document.getElementById('year');
+    const monthSelect = document.getElementById('month');
+    const daySelect = document.getElementById('day');
+
+    // 填充年份、月份、日期
+    function loadDateSelectors() {
+      for (let y = 2024; y <= 2026; y++) {
+        const opt = document.createElement('option');
+        opt.value = y; opt.textContent = y;
+        yearSelect.appendChild(opt);
+      }
+      for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement('option');
+        opt.value = m.toString().padStart(2,'0'); opt.textContent = m;
+        monthSelect.appendChild(opt);
+      }
+      for (let d = 1; d <= 31; d++) {
+        const opt = document.createElement('option');
+        opt.value = d.toString().padStart(2,'0'); opt.textContent = d;
+        daySelect.appendChild(opt);
+      }
+    }
 
     // 填充类别下拉
     async function loadCategories() {
@@ -93,48 +97,43 @@
           opt.textContent = c.name;
           categorySelect.appendChild(opt);
         });
-      } catch (err) {
-        console.error('Failed to load categories', err);
-      }
+      } catch (err) { console.error('Failed to load categories', err); }
     }
 
-    // 渲染搜索结果
+    // 渲染事件列表
     function renderEvents(results) {
       container.innerHTML = '';
       if (!results || results.length === 0) {
-        emptyEl.hidden = false;
-        return;
+        emptyEl.hidden = false; return;
       }
       emptyEl.hidden = true;
       results.forEach(ev => {
         const card = document.createElement('article');
         card.className = 'card';
         const evDate = new Date(ev.event_date).toLocaleDateString();
-        const price = ev.is_free ? 'Free' : `$${ev.price}`;
+        const price = ev.is_free ? 'Free' : `$${Number(ev.price).toFixed(2)}`;
         card.innerHTML = `
-          <h3>${ev.name}</h3>
-          <p>${ev.short_desc || ''}</p>
-          <p><strong>Date:</strong> ${evDate}</p>
-          <p><strong>Location:</strong> ${ev.location_name}</p>
-          <p><strong>Category:</strong> ${ev.category_name}</p>
-          <p><strong>Price:</strong> ${price}</p>
-          <a href="/event.html?id=${ev.event_id}">Details</a>
+          <h3 class="card-title">${ev.name}</h3>
+          <p class="meta"><strong>Date:</strong> ${evDate} • <strong>Location:</strong> ${ev.location_name}</p>
+          <p class="meta"><strong>Category:</strong> ${ev.category_name} • <strong>Price:</strong> ${price}</p>
+          <p class="desc">${ev.short_desc || ''}</p>
+          <button class="btn" onclick="window.location.href='/event.html?id=${ev.event_id}'">View Details</button>
         `;
         container.appendChild(card);
       });
     }
 
-    // 搜索表单提交
-    form.addEventListener('submit', async (e) => {
+    // 表单提交
+    form.addEventListener('submit', async e => {
       e.preventDefault();
-      const year = document.getElementById('year').value;
-      const month = document.getElementById('month').value;
-      const day = document.getElementById('day').value;
+      const year = yearSelect.value;
+      const month = monthSelect.value;
+      const day = daySelect.value;
       const location = document.getElementById('location').value.trim();
-      const category = document.getElementById('category').value;
+      const category = categorySelect.value;
 
       try {
-        container.innerHTML = '<p class="loading">Loading...</p>';
+        container.innerHTML = '<p class="loading">Loading events…</p>';
         const results = await searchEvents({ year, month, day, location, category });
         renderEvents(results);
       } catch (err) {
@@ -150,7 +149,7 @@
       emptyEl.hidden = true;
     });
 
-    // 初始化页面
+    loadDateSelectors();
     loadCategories();
   </script>
 </body>
