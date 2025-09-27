@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>City Charity Events — Home</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="/">Home</a>
+    <a href="/search.html">Search Events</a>
+  </nav>
+
+  <header class="hero">
+    <h1>Sunrise Charity — Making the City Better</h1>
+    <p>我们的使命：支持儿童教育、援助无家可归者与环境保护。联系我们: info@sunrise.org</p>
+  </header>
+
+  <main>
+    <section class="events-section">
+      <h2>Upcoming Events</h2>
+      <div id="events-container" class="cards">
+        <!-- JS will inject event cards here -->
+      </div>
+      <div id="events-empty" class="empty" hidden>No upcoming events found.</div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© Sunrise Charity • 地址：10 Charity St, Cityville</p>
+  </footer>
+
+  <script type="module">
+    import { getEvents } from './js/api.js';
+
+    async function renderHome() {
+      const container = document.getElementById('events-container');
+      const emptyEl = document.getElementById('events-empty');
+      container.innerHTML = '<p class="loading">Loading events…</p>';
+      try {
+        // 请求 upcoming events（server 默认会过滤 is_suspended=1 与过去事件）
+        const events = await getEvents({ upcoming: true, limit: 12 });
+        container.innerHTML = '';
+        if (!Array.isArray(events) || events.length === 0) {
+          emptyEl.hidden = false;
+          return;
+        }
+        emptyEl.hidden = true;
+        events.forEach(ev => {
+          const card = document.createElement('article');
+          card.className = 'card';
+          const evDate = new Date(ev.event_date);
+          const dateStr = evDate.toLocaleString();
+          const priceText = ev.is_free ? 'Free' : ('$' + Number(ev.price).toFixed(2));
+          card.innerHTML = `
+            <h3 class="card-title">${ev.name}</h3>
+            <p class="meta"><strong>Category:</strong> ${ev.category_name} • <strong>Date:</strong> ${dateStr}</p>
+            <p class="meta"><strong>Location:</strong> ${ev.location_name || 'TBA'}</p>
+            <p class="desc">${ev.short_desc || ''}</p>
+            <div class="card-footer">
+              <span class="price">${priceText}</span>
+              <a class="details-link" href="/event.html?id=${ev.event_id}">View details</a>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Failed to load events', err);
+        container.innerHTML = '<p class="error">无法加载活动（请检查服务器是否已启动）。</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderHome);
+  </script>
+</body>
+</html>

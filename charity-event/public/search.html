@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Search Charity Events</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="/">Home</a>
+    <a href="/search.html">Search Events</a>
+  </nav>
+
+  <header class="hero">
+    <h1>Search Events</h1>
+    <p>Find charity events in your city based on date, location, or category.</p>
+  </header>
+
+  <main>
+    <section class="search-section">
+      <form id="search-form">
+        <label>
+          Date:
+          <select id="year">
+            <option value="">Year</option>
+            <script>
+              for (let y = 2000; y <= 2025; y++) {
+                document.write(`<option value="${y}">${y}</option>`);
+              }
+            </script>
+          </select>
+
+          <select id="month">
+            <option value="">Month</option>
+            <script>
+              for (let m = 1; m <= 12; m++) {
+                document.write(`<option value="${m}">${m}</option>`);
+              }
+            </script>
+          </select>
+
+          <select id="day">
+            <option value="">Day</option>
+            <script>
+              for (let d = 1; d <= 31; d++) {
+                document.write(`<option value="${d}">${d}</option>`);
+              }
+            </script>
+          </select>
+        </label>
+
+        <label>
+          Location: <input type="text" id="location" name="location" placeholder="Enter city or park">
+        </label>
+
+        <label>
+          Category:
+          <select id="category" name="category">
+            <option value="">All Categories</option>
+          </select>
+        </label>
+
+        <button type="submit">Search</button>
+        <button type="button" id="clear-filters">Clear Filters</button>
+      </form>
+
+      <div id="events-container" class="cards"></div>
+      <div id="events-empty" class="empty" hidden>No events found.</div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© Sunrise Charity</p>
+  </footer>
+
+  <script type="module">
+    import { searchEvents, getCategories } from './js/api.js';
+
+    const form = document.getElementById('search-form');
+    const container = document.getElementById('events-container');
+    const emptyEl = document.getElementById('events-empty');
+    const clearBtn = document.getElementById('clear-filters');
+    const categorySelect = document.getElementById('category');
+
+    // 填充类别下拉
+    async function loadCategories() {
+      try {
+        const cats = await getCategories();
+        cats.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.category_id;
+          opt.textContent = c.name;
+          categorySelect.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Failed to load categories', err);
+      }
+    }
+
+    // 渲染搜索结果
+    function renderEvents(results) {
+      container.innerHTML = '';
+      if (!results || results.length === 0) {
+        emptyEl.hidden = false;
+        return;
+      }
+      emptyEl.hidden = true;
+      results.forEach(ev => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        const evDate = new Date(ev.event_date).toLocaleDateString();
+        const price = ev.is_free ? 'Free' : `$${ev.price}`;
+        card.innerHTML = `
+          <h3>${ev.name}</h3>
+          <p>${ev.short_desc || ''}</p>
+          <p><strong>Date:</strong> ${evDate}</p>
+          <p><strong>Location:</strong> ${ev.location_name}</p>
+          <p><strong>Category:</strong> ${ev.category_name}</p>
+          <p><strong>Price:</strong> ${price}</p>
+          <a href="/event.html?id=${ev.event_id}">Details</a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 搜索表单提交
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const year = document.getElementById('year').value;
+      const month = document.getElementById('month').value;
+      const day = document.getElementById('day').value;
+      const location = document.getElementById('location').value.trim();
+      const category = document.getElementById('category').value;
+
+      try {
+        container.innerHTML = '<p class="loading">Loading...</p>';
+        const results = await searchEvents({ year, month, day, location, category });
+        renderEvents(results);
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p class="error">Failed to load events.</p>';
+      }
+    });
+
+    // 清空表单
+    clearBtn.addEventListener('click', () => {
+      form.reset();
+      container.innerHTML = '';
+      emptyEl.hidden = true;
+    });
+
+    // 初始化页面
+    loadCategories();
+  </script>
+</body>
+</html>
