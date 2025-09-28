@@ -1,54 +1,134 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Animal Welfare Events — Home</title>
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
-  <!-- 导航 -->
-  <header class="header">
+  <header class="navbar">
     <div class="container">
-      <h1>Animal Welfare Events</h1>
-      <p class="tagline">Our Mission: Caring for animals, rescuing abandoned pets, and promoting adoption. Contact: info@pawswhiskers.org</p>
-      <nav class="nav">
-        <a href="/">Home</a>
-        <a href="/search.html">Search Events</a>
-      </nav>
+      <div class="nav-brand">
+        <a href="/">Animal Welfare</a>
+      </div>
+      <nav class="nav-menu"> <a href="/" class="nav-link active">首页</a>
+         <a href="/search.html" class="nav-link ">活动搜索</a> 
+         <button class="nav-link nav-register-btn">注册</button> 
+        </nav>
+        <!-- 添加提示框（初始隐藏） --> 
+         <div id="register-toast" class="toast" style="display: none;">
+           <p>此功能开发中</p> </div>
     </div>
   </header>
 
-  <!-- 主要内容 -->
   <main class="container">
+    <!-- 英雄 -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>关爱动物，我们在行动</h1>
+        <p>一起为流浪动物创造更美好的明天 — 支持领养、救助与保护。</p>
+      </div>
+      <div class="hero-image">
+        <img src="/images/leocat.jpg" alt="人与动物友好相处" onerror="this.style.display='none'">
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <h2 class="features-title">我们的特色</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <img src="/images/save.jpg" alt="动物救助" />
+            <h3>动物救助</h3>
+            <p>我们组织志愿者开展救助行动，为流浪和受伤动物提供帮助。</p>
+          </div>
+          <div class="feature-item">
+            <img src="/images/hug1.jpg" alt="领养活动" />
+            <h3>领养活动</h3>
+            <p>通过定期举办领养日，为宠物找到温暖的家。</p>
+          </div>
+          <div class="feature-item">
+            <img src="/images/speech.jpg" alt="教育与宣传" />
+            <h3>教育与宣传</h3>
+            <p>我们推广动物保护意识，呼吁公众关爱与尊重生命。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- 活动列表 -->
     <section class="events-section">
-      <h2>Upcoming Events</h2>
-      <div id="events-container" class="cards">
+      <div class="section-header">
+        <h2>近期活动</h2>
+      </div>
+
+      <div id="events-container" class="cards-grid">
         <!-- JS 注入活动卡片 -->
       </div>
-      <div id="events-empty" class="empty" hidden>No upcoming events found.</div>
+
+      <div id="events-empty" class="empty-state" hidden>
+        <div class="empty-icon">🐾</div>
+        <h3>暂无近期活动</h3>
+        <p>当前没有即将举行的活动，请稍后再来查看</p>
+      </div>
     </section>
   </main>
 
-  <!-- 页脚 -->
   <footer class="footer">
     <div class="container">
-      <p>© 2025 Animal Welfare Foundation • Address: 10 Charity St, Petville</p>
+      <div class="footer-content">
+        <div class="footer-info">
+          <h4>Animal Welfare Foundation</h4>
+          <p>地址: 10 Charity St, Petville</p>
+          <p>邮箱: info@pawswhiskers.org</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Animal Welfare Foundation • 关爱动物，我们在行动</p>
+      </div>
     </div>
   </footer>
 
-  <!-- JS 动态加载事件 -->
   <script type="module">
     import { getEvents } from './js/api.js';
+
+    // 小工具：HTML 转义
+    function escapeHtml(str = '') {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+  const registerBtn = document.querySelector('.nav-register-btn');
+  const toast = document.getElementById('register-toast');
+
+  registerBtn.addEventListener('click', () => {
+    toast.style.display = 'block';
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 300); // 等待淡出动画完成
+    }, 3000); // 显示3秒
+  });
+});
 
     async function renderHome() {
       const container = document.getElementById('events-container');
       const emptyEl = document.getElementById('events-empty');
 
-      container.innerHTML = '<p class="loading">Loading events…</p>';
+      container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>加载活动中…</p></div>';
 
       try {
-        const events = await getEvents({ upcoming: true, limit: 12 });
+        const events = await getEvents({ upcoming: true, limit: 6 });
         container.innerHTML = '';
         if (!Array.isArray(events) || events.length === 0) {
           emptyEl.hidden = false;
@@ -58,27 +138,51 @@
 
         events.forEach(ev => {
           const card = document.createElement('article');
-          card.className = 'card';
+          card.className = 'card event-card';
 
-          const evDate = new Date(ev.event_date);
-          const dateStr = evDate.toLocaleString();
-          const priceText = ev.is_free ? 'Free' : ('$' + Number(ev.price).toFixed(2));
+          const evDate = new Date(ev.event_date || ev.eventDate);
+          const dateStr = evDate.toLocaleDateString('zh-CN', {
+            month: 'short',
+            day: 'numeric'
+          });
+          const priceText = ev.is_free ? '免费参与' : ('¥' + Number(ev.price || 0).toFixed(2));
 
+          // 卡片 HTML（包含图片）
           card.innerHTML = `
-            <h3 class="card-title">${ev.name}</h3>
-            <p class="meta"><strong>Category:</strong> ${ev.category_name} • <strong>Date:</strong> ${dateStr}</p>
-            <p class="meta"><strong>Location:</strong> ${ev.location_name || 'TBA'}</p>
-            <p class="desc">${ev.short_desc || ''}</p>
-            <div class="card-footer">
-              <span class="price">${priceText}</span>
-              <button class="btn" onclick="window.location.href='/event.html?id=${ev.event_id}'">View Details</button>
+            <div class="card-image">
+              <img
+                src="${ev.image_url || '/images/dogparty.jpg'}"
+                alt="${escapeHtml(ev.name)}"
+                loading="lazy"
+                onerror="this.onerror=null; this.src='/images/dogparty.jpg';"
+              >
+            </div>
+            <div class="card-content">
+              <div class="card-header">
+                <span class="event-category">${escapeHtml(ev.category_name || '')}</span>
+                <span class="event-price ${ev.is_free ? 'free' : 'paid'}">${priceText}</span>
+              </div>
+
+              <h3 class="card-title">${escapeHtml(ev.name)}</h3>
+
+              <div class="event-meta">
+                <div class="meta-item"><span class="meta-icon">📅</span> <span>${dateStr}</span></div>
+                <div class="meta-item"><span class="meta-icon">📍</span> <span>${escapeHtml(ev.location_name || '地点待定')}</span></div>
+              </div>
+
+              <p class="card-desc">${escapeHtml(ev.short_desc || '暂无描述')}</p>
+
+              <div class="card-actions">
+                <button class="btn btn-primary" onclick="window.location.href='/event.html?id=${ev.event_id}'">查看详情</button>
+              </div>
             </div>
           `;
+
           container.appendChild(card);
         });
       } catch (err) {
         console.error('Failed to load events', err);
-        container.innerHTML = '<p class="error">Failed to load events. Please make sure the server is running.</p>';
+        container.innerHTML = '<div class="error-state"><p>加载活动失败</p></div>';
       }
     }
 
