@@ -10,75 +10,81 @@
 <body>
   <header class="navbar">
     <div class="container">
-      <div class="nav-brand"><a href="/">Animal Welfare</a></div>
-      <nav class="nav-menu"> <a href="/" class="nav-link">首页</a>
-        <a href="/search.html" class="nav-link active">活动搜索</a> 
-        <button class="nav-link nav-register-btn">注册</button> 
+      <div class="nav-brand">
+        <a href="/">
+          <img src="/images/22.jpg" alt="Sunny Tails Logo" class="nav-logo">
+          Sunny Tails
+        </a>
+      </div>
+      
+      <nav class="nav-menu"> <a href="/" class="nav-link">Home</a>
+        <a href="/search.html" class="nav-link active">Events Search <Search></Search></a> 
+        <button class="nav-link nav-register-btn">Log In</button> 
        </nav>
        <!-- 添加提示框（初始隐藏） --> 
         <div id="register-toast" class="toast" style="display: none;">
-          <p>此功能开发中</p> </div>
+          <p>This feature is under development</p> </div>
     </div>
   </header>
 
   <main class="container">
     <div class="page-header">
-      <h2 class="page-title">活动搜索</h2>
-      <p class="page-subtitle">查找您感兴趣的动物福利活动</p>
+      <h2 class="page-title">Event search</h2>
+      <p class="page-subtitle">Search for animal welfare activities that interest you</p>
     </div>
 
     <section class="search-section">
       <form id="search-form" class="search-form">
         <div class="form-section">
-          <h3>时间筛选</h3>
+          <h3>Time screening</h3>
           <div class="form-row">
             <label class="form-field">
-              <span class="field-label">年份</span>
-              <select id="year" name="year" class="form-select"><option value="">选择年份</option></select>
+              <span class="field-label">Year</span>
+              <select id="year" name="year" class="form-select"><option value="">Select the year</option></select>
             </label>
             <label class="form-field">
-              <span class="field-label">月份</span>
-              <select id="month" name="month" class="form-select"><option value="">选择月份</option></select>
+              <span class="field-label">Month</span>
+              <select id="month" name="month" class="form-select"><option value="">Select the month</option></select>
             </label>
             <label class="form-field">
-              <span class="field-label">日期</span>
-              <select id="day" name="day" class="form-select"><option value="">选择日期</option></select>
+              <span class="field-label">Date</span>
+              <select id="day" name="day" class="form-select"><option value="">Select a date</option></select>
             </label>
           </div>
         </div>
 
         <div class="form-section">
-          <h3>其他筛选</h3>
+          <h3>Other screenings</h3>
           <div class="form-row">
             <label class="form-field">
-              <span class="field-label">活动地点</span>
-              <input type="text" id="location" name="location" placeholder="输入城市或公园名称" class="form-input" />
+              <span class="field-label">Event locations</span>
+              <input type="text" id="location" name="location" placeholder="Enter the name of the city or park" class="form-input" />
             </label>
             <label class="form-field">
-              <span class="field-label">活动分类</span>
-              <select id="category" name="category" class="form-select"><option value="">全部分类</option></select>
+              <span class="field-label">Event Classification</span>
+              <select id="category" name="category" class="form-select"><option value="">All Classification</option></select>
             </label>
           </div>
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">搜索活动</button>
-          <button type="button" id="clear-filters" class="btn btn-secondary">清空筛选</button>
+          <button type="submit" class="btn btn-primary">Search event</button>
+          <button type="button" id="clear-filters" class="btn btn-secondary">Clear the filter</button>
         </div>
       </form>
 
       <div class="results-section">
         <div class="section-header">
-          <h2>搜索结果</h2>
-          <div class="results-count">共 <span id="results-count">0</span> 个活动</div>
+          <h2>Search results</h2>
+          <div class="results-count">There are <span id="results-count">0</span> events in total</div>
         </div>
 
         <div id="events-container" class="cards-grid"></div>
 
         <div id="events-empty" class="empty-state" hidden>
-          <div class="empty-icon">🔍</div>
-          <h3>未找到相关活动</h3>
-          <p>请尝试调整搜索条件或清空筛选重新搜索</p>
+          <div class="empty-icon"></div>
+          <h3>No relevant activities were found</h3>
+          <p>Please try adjusting the search conditions or clearing the filters and searching again</p>
         </div>
       </div>
     </section>
@@ -86,30 +92,36 @@
 
  <!-- 新增页脚 -->
  <footer class="footer">
+
   <div class="container">
+    
     <div class="footer-grid">
+      
       <div class="footer-column">
         <h3 class="footer-title">About Us</h3>
-        <p>We are dedicated to supporting animal welfare through community events, adoption fairs, and fundraising for shelters and wildlife protection.</p>
+        <p>We promote animal welfare through events, adoptions, and shelter support.</p>
       </div>
+
       <div class="footer-column">
         <h3 class="footer-title">Quick Links</h3>
         <ul class="footer-links">
           <li><a href="/index.html">Home</a></li>
-          <li><a href="/events.html">Events</a></li>
+          <li><a href="/search.html">Events Search <Search></Search></a></li>
           <li><a href="/about.html">About</a></li>
           <li><a href="/contact.html">Contact</a></li>
         </ul>
       </div>
+
       <div class="footer-column">
         <h3 class="footer-title">Contact Info</h3>
         <ul class="footer-contact">
-          <li>Email: <a href="mailto:info@charityevents.org">info@charityevents.org</a></li>
-          <li>Phone: <a href="tel:+61290000101">+61 2 9000 0101</a></li>
-          <li>Address: 12 Animal St, Petville</li>
+          <li>Email: <a href="mailto:info@charityevents.org">SunnyTail@gmail.com</a></li>
+          <li>Phone: <a href="tel:+61290000101">+34 3 0119 0221</a></li>
+          <li>Address: 33 Animal St, Petville</li>
         </ul>
       </div>
       <div class="footer-column">
+      
         <h3 class="footer-title">Follow Us</h3>
         <div class="footer-social">
           <a href="https://x.com/charityevents" target="_blank" class="social-icon">
@@ -122,7 +134,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 Charity Events. All rights reserved.</p>
+      <p>&copy; 2025 SunnyTail. </p>
     </div>
   </div>
 </footer>
@@ -168,13 +180,13 @@
     // 填充年份、月份、日期
     function loadDateSelectors() {
       const currentYear = new Date().getFullYear();
-      for (let y = currentYear - 1; y <= currentYear + 2; y++) {
+      for (let y = currentYear - 5; y <= currentYear + 3; y++) {
         const opt = document.createElement('option');
         opt.value = y;
-        opt.textContent = y + '年';
+        opt.textContent = y ;
         yearSelect.appendChild(opt);
       }
-      const months = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
       months.forEach((m, i) => {
         const opt = document.createElement('option');
         opt.value = (i+1).toString().padStart(2,'0');
@@ -184,7 +196,7 @@
       for (let d = 1; d <= 31; d++) {
         const opt = document.createElement('option');
         opt.value = d.toString().padStart(2,'0');
-        opt.textContent = d + '日';
+        opt.textContent = d ;
         daySelect.appendChild(opt);
       }
     }
@@ -225,7 +237,7 @@
           day: 'numeric',
           weekday: 'short'
         });
-        const price = ev.is_free ? '免费参与' : `¥${Number(ev.price || 0).toFixed(2)}`;
+        const price = ev.is_free ? 'Free' : `¥${Number(ev.price || 0).toFixed(2)}`;
 
         card.innerHTML = `
           <div class="card-image">
@@ -243,12 +255,12 @@
             </div>
             <h3 class="card-title">${escapeHtml(ev.name)}</h3>
             <div class="event-meta">
-              <div class="meta-item"><span class="meta-icon">📅</span> <span>${dateStr}</span></div>
-              <div class="meta-item"><span class="meta-icon">📍</span> <span>${escapeHtml(ev.location_name || '地点待定')}</span></div>
+              <div class="meta-item"><span class="meta-icon">Date</span> <span>${dateStr}</span></div>
+              <div class="meta-item"><span class="meta-icon">Location</span> <span>${escapeHtml(ev.location_name || 'The location is to be determined.')}</span></div>
             </div>
-            <p class="card-desc">${escapeHtml(ev.short_desc || '暂无描述')}</p>
+            <p class="card-desc">${escapeHtml(ev.short_desc || 'No description for now')}</p>
             <div class="card-actions">
-              <button class="btn btn-primary" onclick="window.location.href='/event.html?id=${ev.event_id}'">查看详情</button>
+              <button class="btn btn-primary" onclick="window.location.href='/event.html?id=${ev.event_id}'">Details</button>
             </div>
           </div>
         `;
@@ -266,12 +278,12 @@
       const category = categorySelect.value;
 
       try {
-        container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>搜索活动中…</p></div>';
+        container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>In the search campaign...</p></div>';
         const results = await searchEvents({ year, month, day, location, category });
         renderEvents(results);
       } catch (err) {
         console.error(err);
-        container.innerHTML = '<div class="error-state"><p>加载活动失败</p></div>';
+        container.innerHTML = '<div class="error-state"><p>The loading activity failed.</p></div>';
       }
     });
 

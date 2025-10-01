@@ -8,50 +8,87 @@
 </head>
 <body>
   <header class="navbar">
-    <div class="container">
+    <div class="container">   
       <div class="nav-brand">
-        <a href="/">Animal Welfare</a>
+        <a href="/">
+          <img src="/images/22.jpg" alt="Sunny Tails Logo" class="nav-logo">
+          Sunny Tails
+        </a>
       </div>
-      <nav class="nav-menu"> <a href="/" class="nav-link active">首页</a>
-         <a href="/search.html" class="nav-link ">活动搜索</a> 
-         <button class="nav-link nav-register-btn">注册</button> 
-        </nav>
-        <!-- 添加提示框（初始隐藏） --> 
-         <div id="register-toast" class="toast" style="display: none;">
-           <p>此功能开发中</p> </div>
+      
+      <nav class="nav-menu">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/search.html" class="nav-link">Events Search</a>
+        <button class="nav-link nav-register-btn">Log In</button>
+      </nav>
+      
+      <!-- 添加提示框（初始隐藏） --> 
+      <div id="register-toast" class="toast" style="display: none;">
+        <p>This feature is under development</p>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <!-- 英雄 -->
+   
     <section class="hero-section">
       <div class="hero-content">
-        <h1>关爱动物，我们在行动</h1>
-        <p>一起为流浪动物创造更美好的明天 — 支持领养、救助与保护。</p>
+        <h1>With Compassion</h1>
+        <h1> We Create Change </h1>
+
       </div>
       <div class="hero-image">
         <img src="/images/leocat.jpg" alt="人与动物友好相处" onerror="this.style.display='none'">
       </div>
     </section>
 
+        
+    <div class="quote-section">
+      <p class="quote-text">"When we save stray animals, we are actually saving our own humanity. Every act of kindness is a redemption of civilization itself."</p>
+      <p class="quote-author">—— A volunteer’s reflections</p>
+  </div>     
+
+
+      <div class="reflection-card">
+        <!-- 左边图片 -->
+        <div class="card-images">
+          <img src="/images/握手.jpg" alt="文明与动物" onerror="this.style.display='none'">
+        </div>
+      
+        <!-- 右边文字 -->
+        <div class="card-text">
+        
+          <p>
+            A society's attitude towards animals reflects the society's
+            <span class="highlight">civilization and moral standards</span>. The stray animal problem is not an animal problem, but a microcosm of human society.
+          </p>
+          <p style="margin-top: 20px;">
+            Every life saved tells us:
+            <span class="highlight">Love has no boundaries, compassion has no conditions</span>. Only when we learn to treat the weakest lives with gentleness can we truly understand the meaning of life.
+          </p>
+        </div>
+      </div>
+  
+      
+  </section>
     <section class="features">
       <div class="container">
-        <h2 class="features-title">我们的特色</h2>
+        <h2 class="features-title">Our characteristics and mission</h2>
         <div class="features-grid">
           <div class="feature-item">
             <img src="/images/save.jpg" alt="动物救助" />
-            <h3>动物救助</h3>
-            <p>我们组织志愿者开展救助行动，为流浪和受伤动物提供帮助。</p>
+            <h3>Animal Rescue</h3>
+            <p>We organize volunteers to carry out rescue operations to provide assistance to stray and injured animals.</p>
           </div>
           <div class="feature-item">
             <img src="/images/hug1.jpg" alt="领养活动" />
-            <h3>领养活动</h3>
-            <p>通过定期举办领养日，为宠物找到温暖的家。</p>
+            <h3>Adoption Activities</h3>
+            <p>Find loving homes for pets by holding regular adoption days.</p>
           </div>
           <div class="feature-item">
             <img src="/images/speech.jpg" alt="教育与宣传" />
-            <h3>教育与宣传</h3>
-            <p>我们推广动物保护意识，呼吁公众关爱与尊重生命。</p>
+            <h3>Education and publicity</h3>
+            <p>We promote animal protection awareness and call on the public to care for and respect life.</p>
           </div>
         </div>
       </div>
@@ -62,7 +99,7 @@
     <!-- 活动列表 -->
     <section class="events-section">
       <div class="section-header">
-        <h2>近期活动</h2>
+        <h2>Recent Events</h2>
       </div>
 
       <div id="events-container" class="cards-grid">
@@ -71,10 +108,23 @@
 
       <div id="events-empty" class="empty-state" hidden>
         <div class="empty-icon">🐾</div>
-        <h3>暂无近期活动</h3>
-        <p>当前没有即将举行的活动，请稍后再来查看</p>
+        <h3>No recent events</h3>
+        <p>There are currently no upcoming events, please check back later</p>
       </div>
     </section>
+
+    <div class="call-to-action">
+      <h2 class="action-title">Your choices define who you are</h2>
+      <p class="action-text">In this world full of choices, every decision shapes our character. Choose kindness, choose responsibility, and choose to make the world a better place.</p>
+      <div class="action-buttons">
+          <button class="btn btn-primary" onclick="location.href='/search.html'">
+              <span></span>
+              Participate in rescue activities
+          </button>
+          
+      </div>
+  </div>
+
   </main>
 
   <footer class="footer">
@@ -125,7 +175,7 @@
       const container = document.getElementById('events-container');
       const emptyEl = document.getElementById('events-empty');
 
-      container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>加载活动中…</p></div>';
+      container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>Loading</p></div>';
 
       try {
         const events = await getEvents({ upcoming: true, limit: 6 });
@@ -145,7 +195,7 @@
             month: 'short',
             day: 'numeric'
           });
-          const priceText = ev.is_free ? '免费参与' : ('¥' + Number(ev.price || 0).toFixed(2));
+          const priceText = ev.is_free ? 'Free' : ('¥' + Number(ev.price || 0).toFixed(2));
 
           // 卡片 HTML（包含图片）
           card.innerHTML = `
@@ -166,14 +216,14 @@
               <h3 class="card-title">${escapeHtml(ev.name)}</h3>
 
               <div class="event-meta">
-                <div class="meta-item"><span class="meta-icon">📅</span> <span>${dateStr}</span></div>
-                <div class="meta-item"><span class="meta-icon">📍</span> <span>${escapeHtml(ev.location_name || '地点待定')}</span></div>
+                <div class="meta-item"><span class="meta-icon">Date: </span> <span>${dateStr}</span></div>
+                <div class="meta-item"><span class="meta-icon">Location: </span> <span>${escapeHtml(ev.location_name || 'Location to be determined待定')}</span></div>
               </div>
 
-              <p class="card-desc">${escapeHtml(ev.short_desc || '暂无描述')}</p>
+              <p class="card-desc">${escapeHtml(ev.short_desc || 'No description yet')}</p>
 
               <div class="card-actions">
-                <button class="btn btn-primary" onclick="window.location.href='/event.html?id=${ev.event_id}'">查看详情</button>
+                <button class="btn btn-primary" onclick="window.location.href='/event.html?id=${ev.event_id}'">Details</button>
               </div>
             </div>
           `;
@@ -182,7 +232,7 @@
         });
       } catch (err) {
         console.error('Failed to load events', err);
-        container.innerHTML = '<div class="error-state"><p>加载活动失败</p></div>';
+        container.innerHTML = '<div class="error-state"><p>Failed to load event</p></div>';
       }
     }
 

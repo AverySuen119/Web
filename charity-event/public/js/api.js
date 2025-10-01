@@ -29,9 +29,7 @@ export async function getEventById(id) {
 }
 
 /**
- * 搜索 events（支持灵活日期：年、年月、完整日期）
- * options: { year, month, day, location, category }
- */
+ *搜索 events（ */
 export async function searchEvents({ year, month, day, location, category } = {}) {
   const params = new URLSearchParams();
   if (year) params.set('year', year);

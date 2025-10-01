@@ -7,30 +7,32 @@
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
- 
   <header class="navbar">
     <div class="container">
       <div class="nav-brand">
-        <a href="/">Animal Welfare</a>
+        <a href="/">
+          <img src="/images/22.jpg" alt="Sunny Tails Logo" class="nav-logo">
+          Sunny Tails
+        </a>
       </div>
-      <nav class="nav-menu">
-        <a href="/" class="nav-link">首页</a>
-        <a href="/search.html" class="nav-link ">活动搜索</a>
-        <button class="nav-link nav-register-btn">注册</button>
-      </nav>
-      <!-- 添加提示框（初始隐藏） -->
-      <div id="register-toast" class="toast" style="display: none;">
-        <p>此功能开发中</p>
-      </div>
+      
+      <nav class="nav-menu"> <a href="/" class="nav-link">Home</a>
+        <a href="/search.html" class="nav-link ">Events Search <Search></Search></a> 
+        <button class="nav-link nav-register-btn">Log In</button> 
+       </nav>
+       <!-- 添加提示框（初始隐藏） --> 
+        <div id="register-toast" class="toast" style="display: none;">
+          <p>This feature is under development</p> </div>
     </div>
   </header>
+
 
   <main class="container">
 
     <section id="event-container" class="event-details">
       <div class="loading-state">
         <div class="loading-spinner"></div>
-        <p>加载活动详情中…</p>
+        <p>Loading event details...</p>
       </div>
     </section>
   </main>
@@ -78,129 +80,158 @@
   </div>
 </footer>
 
-  <script type="module">
-    import { getEventById } from './js/api.js';
-
-    function escapeHtml(str = '') {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+<script type="module">
+  import { getEventById } from './js/api.js';
+  
+  // 转义函数（防 XSS）
+  function escapeHtml(str = '') {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  
+  const container = document.getElementById('event-container');
+  
+  // 从 URL 拿 id
+  function getEventIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+  }
+  
+  // 渲染并绑定页面内的注册按钮
+  async function loadEvent() {
+    const id = getEventIdFromURL();
+    if (!id) {
+      container.innerHTML = '<div class="error-state"><p>No event is provided.</p></div>';
+      return;
     }
-
-    const container = document.getElementById('event-container');
-
-    function getEventIdFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('id');
-    }
-
-    async function loadEvent() {
-      const id = getEventIdFromURL();
-      if (!id) {
-        container.innerHTML = '<div class="error-state"><p>未提供活动ID</p></div>';
+  
+    try {
+      const event = await getEventById(id);
+      if (!event) {
+        container.innerHTML = '<div class="error-state"><p>The event was not found.</p></div>';
         return;
       }
-
-      try {
-        const event = await getEventById(id);
-        if (!event) {
-          container.innerHTML = '<div class="error-state"><p>活动未找到</p></div>';
-          return;
-        }
-
-        const evDate = new Date(event.event_date || event.eventDate);
-        const dateStr = evDate.toLocaleDateString('zh-CN', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          weekday: 'long'
-        });
-        const timeStr = evDate.toLocaleTimeString('zh-CN', {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        const price = event.is_free ? '免费参与' : `¥${Number(event.price || 0).toFixed(2)}`;
-
-        container.innerHTML = `
-          <article class="event-detail-card">
-            <div class="event-hero-image">
-              <img
-                src="${event.image_url || '/images/event-default.jpg'}"
-                alt="${escapeHtml(event.name)}"
-                loading="lazy"
-                onerror="this.onerror=null; this.src='/images/event-default.jpg';"
-              >
+  
+      const evDate = new Date(event.event_date || event.eventDate);
+      const dateStr = evDate.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      });
+      const timeStr = evDate.toLocaleTimeString('zh-CN', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      const price = event.is_free ? 'Free' : `¥${Number(event.price || 0).toFixed(2)}`;
+  
+      container.innerHTML = `
+        <article class="event-detail-card">
+          <div class="event-hero-image">
+            <img
+              src="${event.image_url || '/images/event-default.jpg'}"
+              alt="${escapeHtml(event.name)}"
+              loading="lazy"
+              onerror="this.onerror=null; this.src='/images/event-default.jpg';"
+            >
+          </div>
+  
+          <div class="event-content">
+            <div class="event-header">
+              <div class="event-category-tag">${escapeHtml(event.category_name || '')}</div>
+              <div class="event-price-tag ${event.is_free ? 'free' : 'paid'}">${price}</div>
             </div>
-
-            <div class="event-content">
-              <div class="event-header">
-                <div class="event-category-tag">${escapeHtml(event.category_name || '')}</div>
-                <div class="event-price-tag ${event.is_free ? 'free' : 'paid'}">${price}</div>
+  
+            <h1 class="event-title">${escapeHtml(event.name)}</h1>
+  
+            <div class="event-info-grid">
+              <div class="info-item">
+                <div class="info-label">Event Date</div>
+                <div class="info-value">${dateStr}</div>
               </div>
-
-              <h1 class="event-title">${escapeHtml(event.name)}</h1>
-
-              <div class="event-info-grid">
-                <div class="info-item">
-                  <div class="info-label">📅 活动日期</div>
-                  <div class="info-value">${dateStr}</div>
-                </div>
-                <div class="info-item">
-                  <div class="info-label">⏰ 活动时间</div>
-                  <div class="info-value">${timeStr}</div>
-                </div>
-                <div class="info-item">
-                  <div class="info-label">📍 活动地点</div>
-                  <div class="info-value">${escapeHtml(event.location_name || '地点待定')}</div>
-                </div>
+              <div class="info-item">
+                <div class="info-label">Event Time</div>
+                <div class="info-value">${timeStr}</div>
               </div>
-
-              
-              <div class="event-description">
-                <h3>活动介绍</h3>
-                <div class="description-content">
-                  ${escapeHtml(event.full_desc || '暂无详细描述')}
-                </div>
-              </div>
-
-              <div class="event-actions">
-                <button class="btn btn-primary btn-large" id="register-btn">立即报名</button>
-                <button class="btn btn-secondary" onclick="window.history.back()">返回列表</button>
+              <div class="info-item">
+                <div class="info-label">Event Location</div>
+                <div class="info-value">${escapeHtml(event.location_name || 'The location is to be determined')}</div>
               </div>
             </div>
-          </article>
-        `;
-        document.addEventListener('DOMContentLoaded', () => {
-  const registerBtn = document.querySelector('.nav-register-btn');
-  const toast = document.getElementById('register-toast');
-
-  registerBtn.addEventListener('click', () => {
-    toast.style.display = 'block';
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 300); // 等待淡出动画完成
-    }, 3000); // 显示3秒
-  });
-});
-
-        const registerBtn = document.getElementById('register-btn');
+  
+            <div class="event-description">
+              <h3>Event Instruction</h3>
+              <div class="description-content">
+                ${escapeHtml(event.full_desc || 'There is no detailed description for the moment')}
+              </div>
+            </div>
+  
+            <div class="event-actions">
+              <button class="btn btn-primary btn-large" id="register-btn">Sign up</button>
+              <button class="btn btn-secondary" id="back-btn">Back to event list</button>
+            </div>
+          </div>
+        </article>
+      `;
+  
+      // 绑定页面内按钮（确保元素存在）
+      const registerBtn = document.getElementById('register-btn');
+      if (registerBtn) {
         registerBtn.addEventListener('click', () => {
-          alert('报名功能正在开发中，敬请期待！');
+          // 这里页面报名暂未实现，提示登录（或模态）
+          alert('Please log in or register first');
         });
-
-      } catch (err) {
-        console.error(err);
-        container.innerHTML = '<div class="error-state"><p>加载活动详情失败</p></div>';
       }
+  
+      const backBtn = document.getElementById('back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          window.history.back();
+        });
+      }
+  
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = '<div class="error-state"><p>Failed to load the event details</p></div>';
     }
-
-    document.addEventListener('DOMContentLoaded', loadEvent);
+  }
+  
+  // ----- 顶部 Log In 按钮 -> toast 逻辑（在 DOMContentLoaded 绑定） -----
+  function setupNavRegisterToast() {
+    const regBtn = document.querySelector('.nav-register-btn');
+    const toast = document.getElementById('register-toast');
+    if (!regBtn || !toast) return;
+  
+    regBtn.addEventListener('click', () => {
+      // show toast: first make visible then add class for transition
+      toast.style.display = 'block';
+      // small delay to ensure display applied before adding class (for transition)
+      requestAnimationFrame(() => toast.classList.add('show'));
+  
+      // hide after 3s
+      clearTimeout(window._navToastTimer);
+      window._navToastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+        // wait transition (matching CSS) then hide
+        setTimeout(() => { toast.style.display = 'none'; }, 320);
+      }, 3000);
+    });
+  }
+  
+  // 在 DOMContentLoaded 时初始化所有
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setupNavRegisterToast();
+      loadEvent();
+    });
+  } else {
+    // already ready
+    setupNavRegisterToast();
+    loadEvent();
+  }
   </script>
-</body>
-</html>
+  
