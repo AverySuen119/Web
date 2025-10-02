@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container">
       <div class="nav-brand">
@@ -15,20 +16,19 @@
           Sunny Tails
         </a>
       </div>
-      
-      <nav class="nav-menu"> <a href="/" class="nav-link">Home</a>
-        <a href="/search.html" class="nav-link ">Events Search <Search></Search></a> 
-        <button class="nav-link nav-register-btn">Log In</button> 
-       </nav>
-       <!-- 添加提示框（初始隐藏） --> 
-        <div id="register-toast" class="toast" style="display: none;">
-          <p>This feature is under development</p> </div>
+      <nav class="nav-menu">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/search.html" class="nav-link">Events Search</a>
+        <button class="nav-link nav-register-btn">Log In</button>
+      </nav>
+      <div id="register-toast" class="toast" style="display:none;">
+        <p>This feature is under development</p>
+      </div>
     </div>
   </header>
 
-
+  <!-- Main Content -->
   <main class="container">
-
     <section id="event-container" class="event-details">
       <div class="loading-state">
         <div class="loading-spinner"></div>
@@ -37,201 +37,162 @@
     </section>
   </main>
 
-<!-- 新增页脚 -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-column">
-        <h3 class="footer-title">About Us</h3>
-        <p>We are dedicated to supporting animal welfare through community events, adoption fairs, and fundraising for shelters and wildlife protection.</p>
-      </div>
-      <div class="footer-column">
-        <h3 class="footer-title">Quick Links</h3>
-        <ul class="footer-links">
-          <li><a href="/index.html">Home</a></li>
-          <li><a href="/events.html">Events</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3 class="footer-title">Contact Info</h3>
-        <ul class="footer-contact">
-          <li>Email: <a href="mailto:info@charityevents.org">info@charityevents.org</a></li>
-          <li>Phone: <a href="tel:+61290000101">+61 2 9000 0101</a></li>
-          <li>Address: 12 Animal St, Petville</li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3 class="footer-title">Follow Us</h3>
-        <div class="footer-social">
-          <a href="https://x.com/charityevents" target="_blank" class="social-icon">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-          </a>
-          <a href="https://facebook.com/charityevents" target="_blank" class="social-icon">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M9 8H7v4h2v12h5V12h3.642l.358-4H14V6.5c0-.827.673-1.5 1.5-1.5H18V0h-2.5C12.462 0 10 2.462 10 5.5V8z"></path></svg>
-          </a>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h3 class="footer-title">About Us</h3>
+          <p>We are dedicated to supporting animal welfare through community events, adoption fairs, and fundraising for shelters and wildlife protection.</p>
+        </div>
+        <div class="footer-column">
+          <h3 class="footer-title">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3 class="footer-title">Contact Info</h3>
+          <ul class="footer-contact">
+            <li>Email: <a href="mailto:info@charityevents.org">info@charityevents.org</a></li>
+            <li>Phone: <a href="tel:+61290000101">+61 2 9000 0101</a></li>
+            <li>Address: 12 Animal St, Petville</li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3 class="footer-title">Follow Us</h3>
+          <div class="footer-social">
+            <a href="https://x.com/charityevents" target="_blank" class="social-icon">X</a>
+            <a href="https://facebook.com/charityevents" target="_blank" class="social-icon">F</a>
+          </div>
         </div>
       </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Charity Events. All rights reserved.</p>
+      </div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 Charity Events. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<script type="module">
-  import { getEventById } from './js/api.js';
-  
-  // 转义函数（防 XSS）
-  function escapeHtml(str = '') {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-  
-  const container = document.getElementById('event-container');
-  
-  // 从 URL 拿 id
-  function getEventIdFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('id');
-  }
-  
-  // 渲染并绑定页面内的注册按钮
-  async function loadEvent() {
-    const id = getEventIdFromURL();
-    if (!id) {
-      container.innerHTML = '<div class="error-state"><p>No event is provided.</p></div>';
-      return;
+  <script type="module">
+    import { getEventById } from './js/api.js';
+
+    function escapeHtml(str='') {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
     }
-  
-    try {
-      const event = await getEventById(id);
-      if (!event) {
-        container.innerHTML = '<div class="error-state"><p>The event was not found.</p></div>';
+
+    const container = document.getElementById('event-container');
+
+    function getEventIdFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    async function loadEvent() {
+      const id = getEventIdFromURL();
+      if (!id) {
+        container.innerHTML = '<div class="error-state"><p>No event is provided.</p></div>';
         return;
       }
-  
-      const evDate = new Date(event.event_date || event.eventDate);
-      const dateStr = evDate.toLocaleDateString('zh-CN', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long'
-      });
-      const timeStr = evDate.toLocaleTimeString('zh-CN', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      const price = event.is_free ? 'Free' : `¥${Number(event.price || 0).toFixed(2)}`;
-  
-      container.innerHTML = `
-        <article class="event-detail-card">
-          <div class="event-hero-image">
-            <img
-              src="${event.image_url || '/images/event-default.jpg'}"
-              alt="${escapeHtml(event.name)}"
-              loading="lazy"
-              onerror="this.onerror=null; this.src='/images/event-default.jpg';"
-            >
-          </div>
-  
-          <div class="event-content">
-            <div class="event-header">
-              <div class="event-category-tag">${escapeHtml(event.category_name || '')}</div>
-              <div class="event-price-tag ${event.is_free ? 'free' : 'paid'}">${price}</div>
+
+      try {
+        const event = await getEventById(id);
+        if (!event) {
+          container.innerHTML = '<div class="error-state"><p>The event was not found.</p></div>';
+          return;
+        }
+
+        const evDate = new Date(event.event_date || event.eventDate);
+        const now = new Date();
+        const isEnded = evDate < now;
+
+        const dateStr = evDate.toLocaleDateString('zh-CN', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+        const timeStr = evDate.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' });
+        const price = event.is_free ? 'Free' : `¥${Number(event.price || 0).toFixed(2)}`;
+
+        container.innerHTML = `
+          <article class="event-detail-card">
+            <div class="event-hero-image">
+              <img src="${event.image_url || '/images/event-default.jpg'}"
+                   alt="${escapeHtml(event.name)}"
+                   loading="lazy"
+                   onerror="this.onerror=null; this.src='/images/event-default.jpg';">
+              ${isEnded ? '<div class="event-ended">Ended</div>' : ''}
             </div>
-  
-            <h1 class="event-title">${escapeHtml(event.name)}</h1>
-  
-            <div class="event-info-grid">
-              <div class="info-item">
-                <div class="info-label">Event Date</div>
-                <div class="info-value">${dateStr}</div>
+
+            <div class="event-content">
+              <div class="event-header">
+                <div class="event-category-tag">${escapeHtml(event.category_name || '')}</div>
+                <div class="event-price-tag ${event.is_free ? 'free' : 'paid'}">${price}</div>
               </div>
-              <div class="info-item">
-                <div class="info-label">Event Time</div>
-                <div class="info-value">${timeStr}</div>
+
+              <h1 class="event-title">${escapeHtml(event.name)}</h1>
+
+              <div class="event-info-grid">
+                <div class="info-item">
+                  <div class="info-label">Event Date</div>
+                  <div class="info-value">${dateStr}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Event Time</div>
+                  <div class="info-value">${timeStr}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Event Location</div>
+                  <div class="info-value">${escapeHtml(event.location_name || 'To be determined')}</div>
+                </div>
               </div>
-              <div class="info-item">
-                <div class="info-label">Event Location</div>
-                <div class="info-value">${escapeHtml(event.location_name || 'The location is to be determined')}</div>
+
+              <div class="event-description">
+                <h3>Event Instruction</h3>
+                <div class="description-content">${escapeHtml(event.full_desc || 'No detailed description yet')}</div>
+              </div>
+
+              <div class="event-actions">
+                <button class="btn btn-primary btn-large" id="register-btn">Sign up</button>
+                <button class="btn btn-secondary" id="back-btn">Back to event list</button>
               </div>
             </div>
-  
-            <div class="event-description">
-              <h3>Event Instruction</h3>
-              <div class="description-content">
-                ${escapeHtml(event.full_desc || 'There is no detailed description for the moment')}
-              </div>
-            </div>
-  
-            <div class="event-actions">
-              <button class="btn btn-primary btn-large" id="register-btn">Sign up</button>
-              <button class="btn btn-secondary" id="back-btn">Back to event list</button>
-            </div>
-          </div>
-        </article>
-      `;
-  
-      // 绑定页面内按钮（确保元素存在）
-      const registerBtn = document.getElementById('register-btn');
-      if (registerBtn) {
-        registerBtn.addEventListener('click', () => {
-          // 这里页面报名暂未实现，提示登录（或模态）
-          alert('Please log in or register first');
-        });
+          </article>
+        `;
+
+        // bind buttons
+        const registerBtn = document.getElementById('register-btn');
+        if (registerBtn) registerBtn.addEventListener('click', () => alert('Please log in or register first'));
+
+        const backBtn = document.getElementById('back-btn');
+        if (backBtn) backBtn.addEventListener('click', () => window.history.back());
+
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = '<div class="error-state"><p>Failed to load the event details</p></div>';
       }
-  
-      const backBtn = document.getElementById('back-btn');
-      if (backBtn) {
-        backBtn.addEventListener('click', () => {
-          window.history.back();
-        });
-      }
-  
-    } catch (err) {
-      console.error(err);
-      container.innerHTML = '<div class="error-state"><p>Failed to load the event details</p></div>';
     }
-  }
-  
-  // ----- 顶部 Log In 按钮 -> toast 逻辑（在 DOMContentLoaded 绑定） -----
-  function setupNavRegisterToast() {
-    const regBtn = document.querySelector('.nav-register-btn');
-    const toast = document.getElementById('register-toast');
-    if (!regBtn || !toast) return;
-  
-    regBtn.addEventListener('click', () => {
-      // show toast: first make visible then add class for transition
-      toast.style.display = 'block';
-      // small delay to ensure display applied before adding class (for transition)
-      requestAnimationFrame(() => toast.classList.add('show'));
-  
-      // hide after 3s
-      clearTimeout(window._navToastTimer);
-      window._navToastTimer = setTimeout(() => {
-        toast.classList.remove('show');
-        // wait transition (matching CSS) then hide
-        setTimeout(() => { toast.style.display = 'none'; }, 320);
-      }, 3000);
-    });
-  }
-  
-  // 在 DOMContentLoaded 时初始化所有
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      setupNavRegisterToast();
-      loadEvent();
-    });
-  } else {
-    // already ready
-    setupNavRegisterToast();
-    loadEvent();
-  }
+
+    function setupNavRegisterToast() {
+      const regBtn = document.querySelector('.nav-register-btn');
+      const toast = document.getElementById('register-toast');
+      if (!regBtn || !toast) return;
+
+      regBtn.addEventListener('click', () => {
+        toast.style.display = 'block';
+        requestAnimationFrame(() => toast.classList.add('show'));
+        clearTimeout(window._navToastTimer);
+        window._navToastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => { toast.style.display = 'none'; }, 320);
+        }, 3000);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => { setupNavRegisterToast(); loadEvent(); });
+    } else {
+      setupNavRegisterToast(); loadEvent();
+    }
   </script>
-  
+</body>
+</html>

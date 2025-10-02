@@ -892,3 +892,109 @@ body { font-family: system-ui, sans-serif; line-height: 1.6; color: #333; backgr
   background: #2c3e50;
   color: white;
 }
+
+.card {
+  position: relative; /* 让内部绝对定位元素参照卡片 */
+}
+
+.event-ended {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background: #e74c3c;
+  border-radius: 2px;
+  z-index: 10; /* 保证在卡片内容上方 */
+}
+
+.event-ended + .btn-primary,
+.card-ended .btn-primary {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* 详情页：已结束显示在图片右上角 */
+.event-hero-image {
+  position: relative;
+}
+.event-hero-image .event-ended {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-block; /* 关键：避免撑满容器 */
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 4px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  line-height: 1.2; /* 防止文字上下留太多空隙 */
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+/* =========================
+   详情页：图片右上角已结束（固定大小）
+   ========================= */
+/* 确保图片容器作为定位上下文 */
+.event-hero-image {
+  position: relative;     /* 必需：让绝对定位的标签参照图片位置 */
+  display: block;         /* 确保不是 flex/grid 子项导致伸展 */
+  overflow: visible;      /* 允许标签显示在图片外部区域（如需要） */
+}
+
+/* 固定尺寸的已结束标签 */
+.event-hero-image .event-ended {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  /* 固定尺寸（需要时修改 width/height） */
+  width: 88px !important;       /* 固定宽度 */
+  height: 30px !important;      /* 固定高度 */
+
+  /* 内容居中 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  /* 文本与截断 */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  padding: 0 8px !important;    /* 内边距可适当调整 */
+  box-sizing: border-box !important;
+
+  /* 外观 */
+  background: #e74c3c !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  line-height: normal !important;
+  border-radius: 6px !important;
+  z-index: 50 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18) !important;
+
+  /* 禁止拉伸继承 */
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  align-self: auto !important;
+}
+
+/* 小屏调整（可选） */
+@media (max-width: 480px) {
+  .event-hero-image .event-ended {
+    width: 72px !important;
+    height: 26px !important;
+    font-size: 0.82rem !important;
+    right: 8px;
+    top: 8px;
+  }
+}

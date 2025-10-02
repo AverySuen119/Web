@@ -11,18 +11,18 @@
     <div class="container">   
       <div class="nav-brand">
         <a href="/">
-          <img src="/images/22.jpg" alt="Sunny Tails Logo" class="nav-logo">
+          <img src="images/22.jpg" alt="Sunny Tails Logo" class="nav-logo">
           Sunny Tails
         </a>
       </div>
       
       <nav class="nav-menu">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/search.html" class="nav-link">Events Search</a>
+        <a href="index.html" class="nav-link active">Home</a>
+
+        <a href="search.html" class="nav-link">Events Search</a>
         <button class="nav-link nav-register-btn">Log In</button>
       </nav>
-      
-      <!-- 添加提示框（初始隐藏） --> 
+     
       <div id="register-toast" class="toast" style="display: none;">
         <p>This feature is under development</p>
       </div>
@@ -38,7 +38,7 @@
 
       </div>
       <div class="hero-image">
-        <img src="/images/leocat.jpg" alt="人与动物友好相处" onerror="this.style.display='none'">
+        <img src="images/leocat.jpg" alt="人与动物友好相处" onerror="this.style.display='none'">
       </div>
     </section>
 
@@ -52,7 +52,7 @@
       <div class="reflection-card">
         <!-- 左边图片 -->
         <div class="card-images">
-          <img src="/images/握手.jpg" alt="文明与动物" onerror="this.style.display='none'">
+          <img src="images/握手.jpg" alt="文明与动物" onerror="this.style.display='none'">
         </div>
       
         <!-- 右边文字 -->
@@ -76,17 +76,17 @@
         <h2 class="features-title">Our characteristics and mission</h2>
         <div class="features-grid">
           <div class="feature-item">
-            <img src="/images/save.jpg" alt="动物救助" />
+            <img src="images/save.jpg" alt="动物救助" />
             <h3>Animal Rescue</h3>
             <p>We organize volunteers to carry out rescue operations to provide assistance to stray and injured animals.</p>
           </div>
           <div class="feature-item">
-            <img src="/images/hug1.jpg" alt="领养活动" />
+            <img src="images/hug1.jpg" alt="领养活动" />
             <h3>Adoption Activities</h3>
             <p>Find loving homes for pets by holding regular adoption days.</p>
           </div>
           <div class="feature-item">
-            <img src="/images/speech.jpg" alt="教育与宣传" />
+            <img src="images/speech.jpg" alt="教育与宣传" />
             <h3>Education and publicity</h3>
             <p>We promote animal protection awareness and call on the public to care for and respect life.</p>
           </div>
@@ -127,25 +127,58 @@
 
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-info">
-          <h4>Animal Welfare Foundation</h4>
-          <p>地址: 10 Charity St, Petville</p>
-          <p>邮箱: info@pawswhiskers.org</p>
+ <!-- 新增页脚 -->
+ <footer class="footer">
+
+  <div class="container">
+    
+    <div class="footer-grid">
+      
+      <div class="footer-column">
+        <h3 class="footer-title">About Us</h3>
+        <p>We promote animal welfare through events, adoptions, and shelter support.</p>
+      </div>
+
+      <div class="footer-column">
+        <h3 class="footer-title">Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/search.html">Events Search <Search></Search></a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3 class="footer-title">Contact Info</h3>
+        <ul class="footer-contact">
+          <li>Email: <a href="mailto:info@charityevents.org">SunnyTail@gmail.com</a></li>
+          <li>Phone: <a href="tel:+61290000101">+34 3 0119 0221</a></li>
+          <li>Address: 33 Animal St, Petville</li>
+        </ul>
+      </div>
+      <div class="footer-column">
+      
+        <h3 class="footer-title">Follow Us</h3>
+        <div class="footer-social">
+          <a href="https://x.com/charityevents" target="_blank" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+          </a>
+          <a href="https://facebook.com/charityevents" target="_blank" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M9 8H7v4h2v12h5V12h3.642l.358-4H14V6.5c0-.827.673-1.5 1.5-1.5H18V0h-2.5C12.462 0 10 2.462 10 5.5V8z"></path></svg>
+          </a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>© 2025 Animal Welfare Foundation • 关爱动物，我们在行动</p>
-      </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <p>&copy; 2025 SunnyTail. </p>
+    </div>
+  </div>
+</footer>
 
   <script type="module">
     import { getEvents } from './js/api.js';
 
-    // 小工具：HTML 转义
     function escapeHtml(str = '') {
       return String(str)
         .replace(/&/g, '&amp;')
@@ -197,14 +230,14 @@
           });
           const priceText = ev.is_free ? 'Free' : ('¥' + Number(ev.price || 0).toFixed(2));
 
-          // 卡片 HTML（包含图片）
+          
           card.innerHTML = `
             <div class="card-image">
               <img
                 src="${ev.image_url || '/images/dogparty.jpg'}"
                 alt="${escapeHtml(ev.name)}"
                 loading="lazy"
-                onerror="this.onerror=null; this.src='/images/dogparty.jpg';"
+                onerror="this.onerror=null; this.src='images/dogparty.jpg';"
               >
             </div>
             <div class="card-content">
@@ -223,7 +256,7 @@
               <p class="card-desc">${escapeHtml(ev.short_desc || 'No description yet')}</p>
 
               <div class="card-actions">
-                <button class="btn btn-primary" onclick="window.location.href='/event.html?id=${ev.event_id}'">Details</button>
+                <button class="btn btn-primary" onclick="window.location.href='event.html?id=${ev.event_id}'">Details</button>
               </div>
             </div>
           `;
