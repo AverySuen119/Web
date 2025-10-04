@@ -63,7 +63,7 @@ INSERT INTO categories (name, description) VALUES
 INSERT INTO events 
 (event_id,organisation_id, category_id, name, short_desc, full_desc, event_date, location_name, location_address, price, is_free, capacity, image_url, goal_amount, raised_amount, is_suspended)
 VALUES
-(1, 1, 1, 'City Paws Fun Run 2025', '5km run to help animal shelters', 'Join our 5km run to raise funds for local animal shelters.', '2025-10-10 08:00:00', 'Central Park', 'Central Park, Petville', 25.00, 0, 500, '/images/1.jpg', 5000.00, 3200.00, 0),
+(1, 1, 1, 'City Paws Fun Run 2025', '5km run to help animal shelters', 'Join our 5km run to raise funds for local animal shelters.', '2025-10-10 08:00:00', 'Central Park', 'Petville', 25.00, 0, 500, '/images/1.jpg', 5000.00, 3200.00, 0),
 (2, 2, 2, 'Happy Tails Gala Dinner 2025', 'A black-tie gala for rescued pets', 'Enjoy a gala with auctions supporting animal adoption. Gala with auctions and guest speakers to support pets in need.', '2025-12-05 19:00:00', 'Grand Hotel Ballroom', '1 Grand St, Petville', 150.00, 0, 200, '/images/2.jpg', 20000.00, 8500.00, 0),
 (3, 3, 4, 'Pet Concert 2026', 'Outdoor concert for wildlife protection', 'Live bands, food trucks, and fundraising for endangered species. All proceeds will go to wildlife protection initiatives.', '2026-03-15 16:00:00', 'Riverside Amphitheatre', 'Riverside, Petville', 40.00, 0, 1000, '/images/3.jpg', 10000.00, 1500.00, 0),
 (4, 1, 3, 'Pet Adoption Fair 2024', 'Meet pets looking for a home', 'Come and adopt your new furry friend. Exclusive event with cats, dogs, and small animals for adoption.', '2024-11-20 10:00:00', 'Community Hall', '12 Animal St, Petville', 0.00, 1, 150, '/images/4.jpg', 8000.00, 8000.00, 0),
